@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1.编码器和译码器的基础概念编码器（encoder）是将信号（如比特流）或数据进行编制、转换为可用以通讯、传输和存储的信号形式的设备。编码器把角位移或直线位移转换成电信号，前者称为码盘，后者称为码尺。按照读出方式编码器可以分为接触式和非接触式两种；按照工作原理编码器可分为增量式和绝对式两类。增量式编码器是将位移转换成周期性的电信号，再把这个电信号转变成计数脉冲，用脉冲的个数表示位移的大小。绝对式编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码器与译码器">
+<meta property="og:url" content="http://example.com/2021/11/06/%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E8%AF%91%E7%A0%81%E5%99%A8/index.html">
+<meta property="og:site_name" content="6797111的博客">
+<meta property="og:description" content="1.编码器和译码器的基础概念编码器（encoder）是将信号（如比特流）或数据进行编制、转换为可用以通讯、传输和存储的信号形式的设备。编码器把角位移或直线位移转换成电信号，前者称为码盘，后者称为码尺。按照读出方式编码器可以分为接触式和非接触式两种；按照工作原理编码器可分为增量式和绝对式两类。增量式编码器是将位移转换成周期性的电信号，再把这个电信号转变成计数脉冲，用脉冲的个数表示位移的大小。绝对式编">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/06/IKDeqx.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/06/IKyCIf.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/06/IKs5rR.png">
+<meta property="article:published_time" content="2021-11-05T16:11:37.000Z">
+<meta property="article:modified_time" content="2021-11-05T17:54:38.721Z">
+<meta property="article:author" content="6797111">
+<meta property="article:tag" content="电子线路">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/11/06/IKDeqx.png">
+
+<link rel="canonical" href="http://example.com/2021/11/06/%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E8%AF%91%E7%A0%81%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>编码器与译码器 | 6797111的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">6797111的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录生活的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/06/%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E8%AF%91%E7%A0%81%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="6797111">
+      <meta itemprop="description" content="6797111的博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="6797111的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          编码器与译码器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-06 00:11:37 / 修改时间：01:54:38" itemprop="dateCreated datePublished" datetime="2021-11-06T00:11:37+08:00">2021-11-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%94%B5%E5%AD%90%E7%94%B5%E5%B7%A5/" itemprop="url" rel="index"><span itemprop="name">电子电工</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>868</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-编码器和译码器的基础概念"><a href="#1-编码器和译码器的基础概念" class="headerlink" title="1.编码器和译码器的基础概念"></a>1.编码器和译码器的基础概念</h1><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BC%96%E7%A0%81">编码</a>器（encoder）是将信号（如<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%AF%94%E7%89%B9%E6%B5%81/6435599">比特流</a>）或<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE/5947370">数据</a>进行编制、转换为可用以通讯、传输和存储的信号形式的设备。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BC%96%E7%A0%81">编码</a>器把<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%A7%92%E4%BD%8D%E7%A7%BB/895038">角位移</a>或直线位移转换成电信号，前者称为<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%A0%81%E7%9B%98/8821641">码盘</a>，后者称为码尺。按照读出方式编码器可以分为接触式和非接触式两种；按照工作原理编码器可分为增量式和绝对式两类。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%A2%9E%E9%87%8F%E5%BC%8F%E7%BC%96%E7%A0%81%E5%99%A8/1922628">增量式编码器</a>是将位移转换成周期性的电信号，再把这个电信号转变成计数脉冲，用脉冲的个数表示位移的大小。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BB%9D%E5%AF%B9%E5%BC%8F%E7%BC%96%E7%A0%81%E5%99%A8/1912852">绝对式编码器</a>的每一个位置对应一个确定的数字码，因此它的示值只与测量的起始和终止位置有关，而与测量的中间过程无关。</p>
+<p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%AF%91%E7%A0%81">译码</a>器(decoder)是一类多输入多输出<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%BB%84%E5%90%88%E9%80%BB%E8%BE%91%E7%94%B5%E8%B7%AF/2083023">组合逻辑电路</a>器件，其可以分为：变量译码和显示译码两类。 变量<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%AF%91%E7%A0%81">译码</a>器一般是一种较少输入变为较多输出的器件，常见的有n线-2^n线译码和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/8421BCD%E7%A0%81">8421BCD码</a>译码两类；显示<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%AF%91%E7%A0%81">译码</a>器用来将<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0/108101">二进制数</a>转换成对应的七段码，一般其可分为驱动LED和驱动LCD两类。</p>
+<blockquote>
+<p>上述资料来源于百度百科</p>
+</blockquote>
+<h2 id="1-1编码器和译码器的判断"><a href="#1-1编码器和译码器的判断" class="headerlink" title="1.1编码器和译码器的判断"></a>1.1编码器和译码器的判断</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IKDeqx"><img src="https://z3.ax1x.com/2021/11/06/IKDeqx.png" alt="IKDeqx.png"></a></p>
+<p><strong>可以得出译码器是将二进制码翻译为特定的对象以达到某种目的的多输入多输出的组合逻辑电路，而编码器的逻辑功能与其相反。</strong></p>
+<h1 id="2-分析功能"><a href="#2-分析功能" class="headerlink" title="2.分析功能"></a>2.分析功能</h1><p>以下分别为二进制编码器与二进制译码器的特征表</p>
+<p>​                                                                    二进制编码器</p>
+<p>​                                <a target="_blank" rel="noopener" href="https://imgtu.com/i/IKyCIf"><img src="https://z3.ax1x.com/2021/11/06/IKyCIf.png" alt="IKyCIf.png"></a>                                  </p>
+<p>​                                                                          二进制译码器</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IKs5rR"><img src="https://z3.ax1x.com/2021/11/06/IKs5rR.png" alt="IKs5rR.png"></a></p>
+<p>先从编码器开始。从特征表中不难看出，当I1,I3,I5,I7=1时，Y0=1,所以得出等式Y0=I1+I3+I5+I7；</p>
+<p>由此可得出其他式子，分别为当I2,I3,I6,I7=1时，Y1=1,所以得出等式Y1=I2+I3+I6+I7;<br>当I4,I5,I6,I7=1时，Y2=1,所以得出等式Y2=I4+I5+I6+I7。</p>
+<p>而根据十进制转二进制判断，就可以得出输出端输出的值了，如I6对应110，I7对应111。</p>
+<p>译码器也可以通过特征表，用最小项写出逻辑表达式</p>
+<p>Y0=A’B‘</p>
+<p>Y1=A’B</p>
+<p>Y2=AB’</p>
+<p>Y3=AB</p>
+<blockquote>
+<p>关于编码器的更多可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43746266/article/details/105755536">数电4_2——常用的组合逻辑电路(1)编码器_必修居士的博客-CSDN博客_四二编码器逻辑表达式</a></p>
+</blockquote>
+<blockquote>
+<p>关于译码器的更多可以参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/370151843">第9章-组合逻辑电路-9.5译码器 - 知乎 (zhihu.com)</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%94%B5%E5%AD%90%E7%BA%BF%E8%B7%AF/" rel="tag"># 电子线路</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/11/05/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0-1/" rel="prev" title="我的第一篇文章">
+      <i class="fa fa-chevron-left"></i> 我的第一篇文章
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BC%96%E7%A0%81%E5%99%A8%E5%92%8C%E8%AF%91%E7%A0%81%E5%99%A8%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1.编码器和译码器的基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E7%BC%96%E7%A0%81%E5%99%A8%E5%92%8C%E8%AF%91%E7%A0%81%E5%99%A8%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">1.1.</span> <span class="nav-text">1.1编码器和译码器的判断</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%88%86%E6%9E%90%E5%8A%9F%E8%83%BD"><span class="nav-number">2.</span> <span class="nav-text">2.分析功能</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">6797111</p>
+  <div class="site-description" itemprop="description">6797111的博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">6797111</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">1k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+<script src="/live2d-widget/autoload.js"></script>
+</html>
