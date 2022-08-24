@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ATRI</title>
+  <icon>https://needquit.github.io/icon.png</icon>
+  
+  <link href="https://needquit.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://needquit.github.io/"/>
+  <updated>2022-08-24T15:33:45.357Z</updated>
+  <id>https://needquit.github.io/</id>
+  
+  <author>
+    <name>NeedQuit</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>N5105软路由AIO基础教程</title>
+    <link href="https://needquit.github.io/posts/2aa81fb0/"/>
+    <id>https://needquit.github.io/posts/2aa81fb0/</id>
+    <published>2022-08-24T13:46:00.000Z</published>
+    <updated>2022-08-24T15:33:45.357Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;近些日子，因为pdd的500-100购物券，我果断入手了看重很久的N5105软路由，同时因为家境贫寒，所以选择了AIO的最低配置内存和硬盘，8GB内存条2666频率+小厂128G固态。&lt;/p&gt;
+&lt;h2 id=&quot;ESXI-基础环境配置&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="路由器" scheme="https://needquit.github.io/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/"/>
+    
+    
+    <category term="Openwrt" scheme="https://needquit.github.io/tags/Openwrt/"/>
+    
+    <category term="Esxi" scheme="https://needquit.github.io/tags/Esxi/"/>
+    
+    <category term="iKuai" scheme="https://needquit.github.io/tags/iKuai/"/>
+    
+    <category term="synology" scheme="https://needquit.github.io/tags/synology/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Padavan在ap模式下的clash使用</title>
+    <link href="https://needquit.github.io/posts/e5ed0d3d/"/>
+    <id>https://needquit.github.io/posts/e5ed0d3d/</id>
+    <published>2022-08-11T03:05:40.000Z</published>
+    <updated>2022-08-12T13:45:42.908Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;首先准备一台已经刷完Padavan的路由器，这里以红米ac2100做演示&quot;&gt;&lt;a href=&quot;#首先准备一台已经刷完Padavan的路由器，这里以红米ac2100做演示&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="路由器" scheme="https://needquit.github.io/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/"/>
+    
+    
+    <category term="Padavan" scheme="https://needquit.github.io/tags/Padavan/"/>
+    
+    <category term="clash" scheme="https://needquit.github.io/tags/clash/"/>
+    
+  </entry>
+  
+</feed>
